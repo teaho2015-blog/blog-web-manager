@@ -37,6 +37,20 @@ export const getNavData = app => [
           },
         ],
       },
+
+      {
+        name: '博客列表',
+        // path: 'blogList',
+        icon: 'table',
+        path: 'blog-list',
+        component: dynamicWrapper(app, ['list'], () => import('../routes/List/BlogList')),
+        // children: [
+        //   {
+        //     name: '',
+        //
+        //   },
+        // ],
+      },
       {
         name: '表单页',
         path: 'form',
