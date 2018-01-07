@@ -14,3 +14,6 @@ _roadhog-api-doc
 npm-debug.log*
 
 /coverage
+
+# intellij IDEA
+/.idea
