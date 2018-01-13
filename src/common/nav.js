@@ -15,35 +15,35 @@ export const getNavData = app => [
     name: '首页', // for breadcrumb
     path: '/',
     children: [
-      {
-        name: 'Dashboard',
-        icon: 'dashboard',
-        path: 'dashboard',
-        children: [
-          {
-            name: '分析页',
-            path: 'analysis',
-            component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
-          },
-          {
-            name: '监控页',
-            path: 'monitor',
-            component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
-          },
-          {
-            name: '工作台',
-            path: 'workplace',
-            component: dynamicWrapper(app, ['project', 'activities', 'chart'], () => import('../routes/Dashboard/Workplace')),
-          },
-        ],
-      },
+      // {
+      //   name: 'Dashboard',
+      //   icon: 'dashboard',
+      //   path: 'dashboard',
+      //   children: [
+      //     {
+      //       name: '分析页',
+      //       path: 'analysis',
+      //       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
+      //     },
+      //     {
+      //       name: '监控页',
+      //       path: 'monitor',
+      //       component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
+      //     },
+      //     {
+      //       name: '工作台',
+      //       path: 'workplace',
+      //       component: dynamicWrapper(app, ['project', 'activities', 'chart'], () => import('../routes/Dashboard/Workplace')),
+      //     },
+      //   ],
+      // },
 
       {
         name: '博客列表',
         // path: 'blogList',
         icon: 'table',
         path: 'blog-list',
-        component: dynamicWrapper(app, ['list'], () => import('../routes/List/BlogList')),
+        component: dynamicWrapper(app, ['blogList'], () => import('../routes/List/BlogList')),
         // children: [
         //   {
         //     name: '',
@@ -51,7 +51,7 @@ export const getNavData = app => [
         //   },
         // ],
       },
-      {
+     /* {
         name: '表单页',
         path: 'form',
         icon: 'form',
@@ -175,7 +175,7 @@ export const getNavData = app => [
             component: dynamicWrapper(app, [], () => import('../routes/Exception/500')),
           },
         ],
-      },
+      },*/
     ],
   },
   {
@@ -183,38 +183,38 @@ export const getNavData = app => [
     path: '/user',
     layout: 'UserLayout',
     children: [
-      {
-        name: '帐户',
-        icon: 'user',
-        path: 'user',
-        children: [
-          {
-            name: '登录',
-            path: 'login',
-            component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
-          },
-          {
-            name: '注册',
-            path: 'register',
-            component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),
-          },
-          {
-            name: '注册结果',
-            path: 'register-result',
-            component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
-          },
-        ],
-      },
+      // {
+      //   name: '帐户',
+      //   icon: 'user',
+      //   path: 'user',
+      //   children: [
+      //     {
+      //       name: '登录',
+      //       path: 'login',
+      //       component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
+      //     },
+      //     {
+      //       name: '注册',
+      //       path: 'register',
+      //       component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),
+      //     },
+      //     {
+      //       name: '注册结果',
+      //       path: 'register-result',
+      //       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
+      //     },
+      //   ],
+      // },
     ],
   },
-  {
-    component: dynamicWrapper(app, [], () => import('../layouts/BlankLayout')),
-    layout: 'BlankLayout',
-    children: {
-      name: '使用文档',
-      path: 'http://pro.ant.design/docs/getting-started',
-      target: '_blank',
-      icon: 'book',
-    },
-  },
+  // {
+  //   component: dynamicWrapper(app, [], () => import('../layouts/BlankLayout')),
+  //   layout: 'BlankLayout',
+  //   children: {
+  //     name: '使用文档',
+  //     path: 'http://pro.ant.design/docs/getting-started',
+  //     target: '_blank',
+  //     icon: 'book',
+  //   },
+  // },
 ];

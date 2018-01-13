@@ -3,6 +3,8 @@ import dva from 'dva';
 import 'moment/locale/zh-cn';
 import './g2';
 import './rollbar';
+import createLoading from 'dva-loading';
+
 // import browserHistory from 'history/createBrowserHistory';
 import './index.less';
 import router from './router';
@@ -14,6 +16,8 @@ const app = dva({
 
 // 2. Plugins
 // app.use({});
+app.use(createLoading());
+
 
 // 3. Register global model
 app.model(require('./models/global'));

@@ -14,7 +14,6 @@ import NoticeIcon from '../components/NoticeIcon';
 import GlobalFooter from '../components/GlobalFooter';
 import NotFound from '../routes/Exception/404';
 import styles from './BasicLayout.less';
-import logo from '../assets/logo.svg';
 
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
@@ -78,7 +77,16 @@ class BasicLayout extends React.PureComponent {
       type: 'global/changeLayoutCollapsed',
       payload: collapsed,
     });
-  }
+  };
+
+  getLogo = (collapsed) =>{
+    if (!collapsed) {
+      return <Link to="/" >
+        <h1>Tea's Blog</h1>
+      </Link>;
+    }
+  };
+
   onMenuClick = ({ key }) => {
     if (key === 'logout') {
       this.props.dispatch({
@@ -168,10 +176,10 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { location, getRouteData } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = 'Tea\'s Blog';
     getRouteData('BasicLayout').forEach((item) => {
       if (item.path === pathname) {
-        title = `${item.name} - Ant Design Pro`;
+        title = `${item.name} - !!!!`;
       }
     });
     return title;
@@ -270,10 +278,7 @@ class BasicLayout extends React.PureComponent {
           className={styles.sider}
         >
           <div className={styles.logo}>
-            <Link to="/">
-              <img src={logo} alt="logo" />
-              <h1>Ant Design Pro</h1>
-            </Link>
+            {this.getLogo(collapsed)}
           </div>
           <Menu
             theme="dark"
@@ -360,27 +365,27 @@ class BasicLayout extends React.PureComponent {
                     )
                   )
                 }
-                <Redirect exact from="/" to="/dashboard/analysis" />
+                {/*<Redirect exact from="/" to="/dashboard/analysis" />*/}
                 <Route component={NotFound} />
               </Switch>
             </div>
             <GlobalFooter
-              links={[{
-                title: 'Pro 首页',
-                href: 'http://pro.ant.design',
-                blankTarget: true,
-              }, {
-                title: 'GitHub',
-                href: 'https://github.com/ant-design/ant-design-pro',
-                blankTarget: true,
-              }, {
-                title: 'Ant Design',
-                href: 'http://ant.design',
-                blankTarget: true,
-              }]}
+              // links={[{
+              //   title: 'Pro 首页',
+              //   href: 'http://pro.ant.design',
+              //   blankTarget: true,
+              // }, {
+              //   title: 'GitHub',
+              //   href: 'https://github.com/ant-design/ant-design-pro',
+              //   blankTarget: true,
+              // }, {
+              //   title: 'Ant Design',
+              //   href: 'http://ant.design',
+              //   blankTarget: true,
+              // }]}
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2017 蚂蚁金服体验技术部出品
+                  Copyright  <Icon type="copyright" /> Tea's Blog 2016.All rights reserved. My works are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.
                 </div>
               }
             />

@@ -7,6 +7,7 @@ import { getProfileBasicData } from './mock/profile';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
+import { getBlogListData,getBlogListData2,getBlogListData3} from './mock/blogList';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -79,6 +80,18 @@ const proxy = {
     res.send({ status: 'ok' });
   },
   'GET /api/notices': getNotices,
+  'GET /api/v1/blog/page/1': getBlogListData,
+  'GET /api/v1/blog/page/2': getBlogListData2,
+  'GET /api/v1/blog/page/3': getBlogListData3,
+
+
+  'PUT /api/v1/blog/article/10': (req, res) => {
+    res.send({ status: 'ok' });
+  },
+
+  'DELETE /api/v1/blog/article/10': (req, res) => {
+    res.send({ status: 'ok' });
+  },
 };
 
 export default noProxy ? {} : delay(proxy, 1000);
