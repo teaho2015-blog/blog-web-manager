@@ -7,6 +7,7 @@ import { routerRedux } from 'dva/router';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
+
 import styles from './BlogList.less';
 
 const RadioButton = Radio.Button;
@@ -14,7 +15,11 @@ const RadioGroup = Radio.Group;
 const { Search } = Input;
 
 @connect(state => ({
-  blogList: { ...state.blogList, loading: state.loading.models.blogList }
+  blogList: {
+    ...state.blogList,
+    loading: state.loading.models.blogList,
+
+  }
 }))
 export default class BlogList extends PureComponent {
 
@@ -65,7 +70,7 @@ export default class BlogList extends PureComponent {
   // static paginRender = (page, type) => true;
 
   render() {
-    const { blogList: {list, pageSize, currentPage, totalPageCount, loading} } = this.props;
+    const { blogList: {list, pageSize, currentPage, totalPageCount, loading, editorState} } = this.props;
 
     const columns = [
       // {
@@ -170,6 +175,8 @@ export default class BlogList extends PureComponent {
                 showQuickJumper={true}
                 itemRender={BlogList.paginRender}
               />
+
+
             </div>
           </div>
 
