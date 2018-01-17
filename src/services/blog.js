@@ -20,3 +20,26 @@ export async function deleteBlog(id) {
 }
 
 
+export async function postImage(image) {
+  return request(`/api/v1/blog/image`, {
+    method: 'POST',
+    body:image,
+  });
+}
+
+export async function createBlog(params) {
+  let urlSearchParams = new URLSearchParams();
+  // let form = new FormData();
+  urlSearchParams.append('title', params.title);
+  urlSearchParams.append('title_secondary', params.title_secondary);
+  urlSearchParams.append('image_url', params.image_url);
+  urlSearchParams.append('content', params.content);
+  console.debug(params);
+  return request(`/api/v1/blog/article`, {
+    method: 'POST',
+    body: urlSearchParams,
+    headers : {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}

@@ -18,7 +18,6 @@ const { Search } = Input;
   blogList: {
     ...state.blogList,
     loading: state.loading.models.blogList,
-
   }
 }))
 export default class BlogList extends PureComponent {
@@ -45,10 +44,17 @@ export default class BlogList extends PureComponent {
 
     this.props.dispatch(routerRedux.push({
       pathname: '/blog-list',
-      query: { page },
+      query: { 'page': page },
     }));
   };
   // console.log('pageChangeHandler');
+
+  createHandler = (values) => {
+    this.props.dispatch({
+      type: 'blogList/create',
+      payload: values,
+    });
+  };
 
   editHandler = (id, values) => {
     console.log(id);
@@ -67,10 +73,17 @@ export default class BlogList extends PureComponent {
     });
   };
 
+
+  updateloadImage = (image) => {
+
+
+    return id;
+  };
+
   // static paginRender = (page, type) => true;
 
   render() {
-    const { blogList: {list, pageSize, currentPage, totalPageCount, loading, editorState} } = this.props;
+    const { blogList: {list, pageSize, currentPage, totalPageCount, loading} } = this.props;
 
     const columns = [
       // {
@@ -105,7 +118,7 @@ export default class BlogList extends PureComponent {
         key: 'operation',
         render: (text, record) => (
           <span className={styles.operation}>
-          <BlogModal record={record} onOk={this.editHandler.bind(null, record.id)}>
+          <BlogModal record={record} onOk={this.editHandler.bind(null, record.id)} >
             <a>Edit</a>
           </BlogModal>
           <Popconfirm title="Confirm to delete?" onConfirm={this.deleteHandler.bind(null, record.id)}>
@@ -154,7 +167,7 @@ export default class BlogList extends PureComponent {
           <div className={styles.normal}>
             <div>
               <div className={styles.create}>
-                <BlogModal record={{}} >
+                <BlogModal record={{}} onOk={this.createHandler} >
                   <Button type="primary">Create Blog</Button>
                 </BlogModal>
               </div>
@@ -171,9 +184,9 @@ export default class BlogList extends PureComponent {
                 current={currentPage}
                 pageSize={pageSize}
                 onChange={this.pageChangeHandler}
-                // defaultCurrent={currentPage}
+                defaultCurrent={currentPage}
                 showQuickJumper={true}
-                itemRender={BlogList.paginRender}
+                // itemRender={BlogList.paginRender}
               />
 
 

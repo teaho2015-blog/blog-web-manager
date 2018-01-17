@@ -1,4 +1,4 @@
-import {queryBlogList, putBlog, deleteBlog} from "../services/blog";
+import {queryBlogList, putBlog, deleteBlog, postImage, createBlog} from "../services/blog";
 
 export default {
   namespace: 'blogList',
@@ -35,16 +35,24 @@ export default {
 
       const response = yield call(deleteBlog, payload);
       yield put({ type: 'reload' });
-    }
+    },
+    *uploadImage({ payload }, { call, put }) {
+      const response = yield call(postImage, payload);
+      yield put({ type: 'reload' });
+    },
+    *create({ payload }, { call, put }) {
+      const response = yield call(createBlog, payload);
+      yield put({ type: 'reload' });
+    },
   },
 
   reducers: {
-    appendList(state,  { payload: { data: list, pageSize, currentPage,totalPageCount } }) {
+    appendList(state,  { payload: { data: list, pageSize, currentPageNum, totalPageCount } }) {
       return {
         ...state,
         list: Array.isArray(list) ? list : [],
         pageSize: pageSize,
-        currentPage: currentPage,
+        currentPage: currentPageNum,
         totalPageCount: totalPageCount,
       };
     },

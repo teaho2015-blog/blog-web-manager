@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Upload, Icon, message } from 'antd';
+import styles  from './BlogModal.less';
+import DOMAIN_URL from '../../constants';
 
 
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 // import * as Icons from 'images/icons';//custom editor icon image
+import draftToHtml from 'draftjs-to-html';
+// import htmlToDraft from 'html-to-draftjs';
+
+const Dragger = Upload.Dragger;
 
 const FormItem = Form.Item;
 
@@ -16,6 +22,12 @@ class BlogEditModal extends Component {
     this.state = {
       visible: false,
       editorState: EditorState.createEmpty(),
+      article: {
+        title: '',
+        title_secondary: '',
+        content: '',
+        image_url:''
+      },
     };
   }
 
@@ -34,13 +46,14 @@ class BlogEditModal extends Component {
 
   okHandler = () => {
     const { onOk } = this.props;
-    // this.props.form.validateFields((err, values) => {
-    //   if (!err) {
-    //     onOk(values);
-    //     this.hideModelHandler();
-    //   }
-    // });
-    onOk(this.state.editorState.getCurrentContent());
+    let  { article } = this.state;
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        article = { ...article, ...values};
+      }
+    });
+    article.content = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
+    onOk(article);
     this.hideModelHandler();
   };
 
@@ -55,8 +68,8 @@ class BlogEditModal extends Component {
     return new Promise(
       (resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://api.imgur.com/3/image');
-        xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
+        xhr.open('POST', DOMAIN_URL + '/api/v1/blog/image');
+        // xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
         const data = new FormData();
         data.append('image', file);
         xhr.send(data);
@@ -75,11 +88,30 @@ class BlogEditModal extends Component {
   render() {
     const { children } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { name, email, website } = this.props.record;
-    const { editorState } = this.state;
+    const { title, title_secondary, image_url, content } = this.props.record;
+    const { editorState, article } = this.state;
     const formItemLayout = {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
+      labelCol: { span: 2 },
+      wrapperCol: { span: 22 },
+    };
+
+    const props = {
+      name: 'image',
+      multiple: false,
+      action:     '/api/v1/blog/image',
+      onChange(info) {
+        const status = info.file.status;
+        if (status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (status === 'done') {
+          article.image_url = info.file.response.data.link;
+          console.log(article.image_url, "upload successfully  year!!!");
+          message.success(`${info.file.name} file uploaded successfully.`);
+        } else if (status === 'error') {
+          message.error(`${info.file.name} file upload failed.`);
+        }
+      },
     };
 
     return (
@@ -92,43 +124,45 @@ class BlogEditModal extends Component {
           visible={this.state.visible}
           onOk={this.okHandler}
           onCancel={this.hideModelHandler}
+          // style={{width:720}}
+          // className={styles.modalWidth}
+          width={'100%'}
         >
           <Form horizontal onSubmit={this.okHandler}>
-           {/* <FormItem
+            <FormItem
               {...formItemLayout}
-              label="Name"
+              label="标题"
             >
               {
-                getFieldDecorator('name', {
-                  initialValue: name,
+                getFieldDecorator('title', {
+                  initialValue: title,
                 })(<Input />)
               }
             </FormItem>
             <FormItem
               {...formItemLayout}
-              label="Email"
+              label="二级标题"
             >
               {
-                getFieldDecorator('email', {
-                  initialValue: email,
+                getFieldDecorator('title_secondary', {
+                  initialValue: title_secondary,
                 })(<Input />)
               }
             </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="Website"
-            >
-              {
-                getFieldDecorator('website', {
-                  initialValue: website,
-                })(<Input />)
-              }
-            </FormItem> */}
+
+            <Dragger {...props}>
+              <p className="ant-upload-drag-icon">
+                <Icon type="inbox" />
+              </p>
+              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+              <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
+            </Dragger>
+
             <Editor
             editorState={editorState}
             toolbarClassName="editor-toolbar"
             wrapperClassName="editor-wrapper"
-            editorClassName="blog-editor"
+            editorClassName={styles.blogEditor}
             onEditorStateChange={this.onEditorStateChange}
             toolbar={{
               inline: { inDropdown: true },

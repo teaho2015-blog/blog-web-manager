@@ -20,5 +20,18 @@
   },
   "ignoreMomentLocale": true,
   "theme": "./src/theme.js",
-  "hash": true
+  "hash": true,
+  "proxy": {
+    "/api/v1/**": {
+      "target": "http://localhost:22200",
+      "changeOrigin": true,
+      "secure": false
+    },
+    "/static/pics/**": {
+      "target": "http://localhost:22200",
+      "changeOrigin": true,
+      "secure": false
+    }
+  }
+
 }

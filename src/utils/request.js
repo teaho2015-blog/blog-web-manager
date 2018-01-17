@@ -25,8 +25,12 @@ export default function request(url, options) {
   const defaultOptions = {
     credentials: 'include',
   };
+  console.log(options);
   const newOptions = { ...defaultOptions, ...options };
-  if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
+
+  let contentType = newOptions.headers ? (newOptions.headers['Content-Type']? newOptions.headers['Content-Type'] : '') : '';
+  console.log("fetch", url, options, contentType  );
+  if ((newOptions.method === 'POST' || newOptions.method === 'PUT') && contentType === '') {
     newOptions.headers = {
       Accept: 'application/json',
       'Content-Type': 'application/json; charset=utf-8',
@@ -34,7 +38,7 @@ export default function request(url, options) {
     };
     newOptions.body = JSON.stringify(newOptions.body);
   }
-
+  // console.log(fetch(url, newOptions));
   return fetch(url, newOptions)
     .then(checkStatus)
     .then(response => response.json())
