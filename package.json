@@ -25,6 +25,7 @@
     "classnames": "^2.2.5",
     "core-js": "^2.5.1",
     "draftjs-to-html": "^0.8.2",
+    "html-to-draftjs": "^1.1.2",
     "dva": "^2.1.0",
     "dva-loading": "^1.0.4",
     "g-cloud": "^1.0.2-beta",
