@@ -1,4 +1,4 @@
-import {queryBlogList, putBlog, deleteBlog, postImage, createBlog} from "../services/blog";
+import {queryBlogList, putBlog, deleteBlog, postImage, createBlog, queryArticle} from "../services/blog";
 
 export default {
   namespace: 'blogList',
@@ -44,6 +44,19 @@ export default {
       const response = yield call(createBlog, payload);
       yield put({ type: 'reload' });
     },
+    *fetchArticle({ payload }, { call, put }) {
+      const response = yield call(queryArticle, payload);
+      yield put({
+        type: 'queryArticleContent',
+        payload: response,
+
+      });
+    },
+    *reload(action, { put, select }) {
+      //function select used to get value from state
+      const page = yield select(state => state.blogList.currentPage);
+      yield put({ type: 'fetch', payload: page  });
+    },
   },
 
   reducers: {
@@ -61,6 +74,22 @@ export default {
         ...state,
         loading: action.payload,
       };
+    },
+    queryArticleContent(state, action) {
+
+    }
+  },
+
+  subscriptions: {
+    setup({ dispatch, history }) {
+      history.listen(({ pathname }) => {
+        if (pathname === '/blog-list') {
+          dispatch({
+            type: 'fetch',
+            payload: 1,
+          });
+        }
+      });
     },
   },
 };

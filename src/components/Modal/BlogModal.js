@@ -3,13 +3,12 @@ import { Modal, Form, Input, Upload, Icon, message } from 'antd';
 import styles  from './BlogModal.less';
 import DOMAIN_URL from '../../constants';
 
-
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw,ContentState } from 'draft-js';
 // import * as Icons from 'images/icons';//custom editor icon image
 import draftToHtml from 'draftjs-to-html';
-// import htmlToDraft from 'html-to-draftjs';
+import htmlToDraft from 'html-to-draftjs';
 
 const Dragger = Upload.Dragger;
 
@@ -19,17 +18,25 @@ class BlogEditModal extends Component {
 
   constructor(props) {
     super(props);
+    const {  title = '', title_secondary ='', image_url = '', content='' } = this.props.record;
     this.state = {
       visible: false,
       editorState: EditorState.createEmpty(),
       article: {
-        title: '',
-        title_secondary: '',
-        content: '',
-        image_url:''
+        title: title,
+        title_secondary: title_secondary,
+        content: content,
+        image_url: image_url
       },
     };
   }
+
+  // componentDidMount() {
+  //   this.props.dispatch({
+  //     type: 'blogList/fetchArticle',
+  //     payload: this.props.record.id,
+  //   });
+  // }
 
   showModelHandler = (e) => {
     if (e) e.stopPropagation();
@@ -88,17 +95,28 @@ class BlogEditModal extends Component {
   render() {
     const { children } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { title, title_secondary, image_url, content } = this.props.record;
-    const { editorState, article } = this.state;
+    // const { id } = this.props.record;
+    const { editorState, article} = this.state;
+
     const formItemLayout = {
       labelCol: { span: 2 },
       wrapperCol: { span: 22 },
     };
+    const contentBlock = htmlToDraft(article.content);
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      const editorState = EditorState.createWithContent(contentState);
+      this.state = {
+        ...this.state,
+        'editorState': editorState,
+      };
+    }
 
+    //dragger props
     const props = {
       name: 'image',
       multiple: false,
-      action:     '/api/v1/blog/image',
+      action: '/api/v1/blog/image',
       onChange(info) {
         const status = info.file.status;
         if (status !== 'uploading') {
@@ -112,6 +130,12 @@ class BlogEditModal extends Component {
           message.error(`${info.file.name} file upload failed.`);
         }
       },
+      defaultFileList: article.image_url !==''? [{
+        uid: 1,
+        name: 'header.jpg',
+        status: 'done',
+        url: article.image_url,
+      }] : [],
     };
 
     return (
@@ -128,14 +152,14 @@ class BlogEditModal extends Component {
           // className={styles.modalWidth}
           width={'100%'}
         >
-          <Form horizontal onSubmit={this.okHandler}>
+          <Form layout={'vertical'} onSubmit={this.okHandler}>
             <FormItem
               {...formItemLayout}
               label="标题"
             >
               {
                 getFieldDecorator('title', {
-                  initialValue: title,
+                  initialValue: article.title,
                 })(<Input />)
               }
             </FormItem>
@@ -145,7 +169,7 @@ class BlogEditModal extends Component {
             >
               {
                 getFieldDecorator('title_secondary', {
-                  initialValue: title_secondary,
+                  initialValue: article.title_secondary,
                 })(<Input />)
               }
             </FormItem>

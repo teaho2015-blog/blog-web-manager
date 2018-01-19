@@ -23,10 +23,10 @@ const { Search } = Input;
 export default class BlogList extends PureComponent {
 
   componentDidMount() {
-    this.props.dispatch({
-      type: 'blogList/fetch',
-      payload: 1,
-    });
+    // this.props.dispatch({
+    //   type: 'blogList/fetch',
+    //   payload: 1,
+    // });
   }
 
   pageChangeHandler = (page) => {
@@ -42,10 +42,12 @@ export default class BlogList extends PureComponent {
       payload: page,
     });
 
-    this.props.dispatch(routerRedux.push({
-      pathname: '/blog-list',
-      query: { 'page': page },
-    }));
+    // this.props.dispatch(routerRedux.push({
+    //   pathname: '/blog-list',
+    //   query: { 'page': page },
+    // }));
+
+
   };
   // console.log('pageChangeHandler');
 
@@ -57,8 +59,6 @@ export default class BlogList extends PureComponent {
   };
 
   editHandler = (id, values) => {
-    console.log(id);
-    console.log(values);
     this.props.dispatch({
       type: 'blogList/put',
       payload: {id, values},

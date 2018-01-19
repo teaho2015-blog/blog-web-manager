@@ -20,6 +20,13 @@ export async function deleteBlog(id) {
 }
 
 
+export async function queryArticle(params) {
+  return request(`/api/v1/blog/page/${params}`, {
+    method: 'GET',
+  });
+}
+
+
 export async function postImage(image) {
   return request(`/api/v1/blog/image`, {
     method: 'POST',
